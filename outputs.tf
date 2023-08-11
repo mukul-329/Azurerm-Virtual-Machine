@@ -12,7 +12,7 @@ output "resource_group" {
 }
 output "public_ip" {
   value=azurerm_public_ip.mod1
-  description="Attributes reference for the public ip"
+  description="Attributes reference for the public ip created for virtual machine"
 }
 output "network_security_group" {
   value=azurerm_network_security_group.mod1
