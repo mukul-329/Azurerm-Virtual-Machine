@@ -1,6 +1,6 @@
 output "subnets" {
   value = azurerm_subnet.mod1
-  description="Attributes reference to the subnet"
+  description="Attributes reference of all the subnets created in a virtual network"
 }
 output "virtual_network" {
   value = azurerm_virtual_network.mod1

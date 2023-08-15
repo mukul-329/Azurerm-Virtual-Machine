@@ -4,45 +4,45 @@ resource "azurerm_resource_group" "mod1" {
 }
 
 resource "azurerm_virtual_network" "mod1" {
-  name                = var.virtual_network_name
-  location            = var.virtual_network_location
+  name                = local.virtual_network_name
+  location            = var.virtual_machine_location
   resource_group_name = azurerm_resource_group.mod1.name
   address_space       = var.address_space
 }
 
 resource "azurerm_subnet" "mod1" {
-  for_each=var.subnets
-  name                 = each.key
-  address_prefixes     = each.value
+  count=length(var.subnets)
+  name                 = locals.subnet[count.index]
+  address_prefixes     = locals.subnet_cidr[count.index]
   resource_group_name  = azurerm_resource_group.mod1.name
   virtual_network_name = azurerm_virtual_network.mod1.name
 }
 
 resource "azurerm_public_ip" "mod1" {
-  name                = var.public_ip_name
+  name                = local.public_ip_name
   resource_group_name = azurerm_resource_group.mod1.name
   location            = azurerm_virtual_network.mod1.location
   allocation_method   = var.public_ip_allocation_method
 }
 resource "azurerm_network_interface" "mod1" {
-  name                = var.network_interface_card_name
+  name                = local.network_interface_card_name
   location            = azurerm_virtual_network.mod1.location
   resource_group_name = azurerm_resource_group.mod1.name
   ip_configuration {
     public_ip_address_id          = azurerm_public_ip.mod1.id
-    subnet_id                     = azurerm_subnet.mod1[var.subnet_to_be_associated].id
+    subnet_id                     = azurerm_subnet.mod1[index(local.subnet,var.subnet_to_be_associated)].id
     name                          = var.nic_ip_configuration
     private_ip_address_allocation = var.private_ip_address_allocation
   }
 }
 
 resource "azurerm_network_security_group" "mod1" {
-  name                = var.network_security_group_name
+  name                = local.network_security_group_name
   location            = azurerm_virtual_network.mod1.location
   resource_group_name = azurerm_resource_group.mod1.name
 
   security_rule {
-    name                       = var.inbound_security_rule_name
+    name                       = local.inbound_security_rule_name
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
@@ -57,7 +57,7 @@ resource "azurerm_network_security_group" "mod1" {
 
 resource "azurerm_subnet_network_security_group_association" "mod1" {
   network_security_group_id = azurerm_network_security_group.mod1.id
-  subnet_id                 = azurerm_subnet.mod1[var.subnet_to_be_associated].id
+  subnet_id                 = azurerm_subnet.mod1[index(local.subnet,var.subnet_to_be_associated)].id
 }
 
 resource "azurerm_virtual_machine" "mod1" {
@@ -83,9 +83,9 @@ resource "azurerm_virtual_machine" "mod1" {
     managed_disk_type = var.storage_os_disk.managed_disk_type
   }
   os_profile {
-    computer_name  = var.admin.computer_name
-    admin_username =var.admin.username
-    admin_password = var.admin.password
+    computer_name  = var.vm_admin.computer_name
+    admin_username =var.vm_admin.username
+    admin_password = var.vm_admin.password
   }
   os_profile_windows_config {
     provision_vm_agent = var.os_profile_windows_config.provision_vm_agent

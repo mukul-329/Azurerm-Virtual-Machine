@@ -9,9 +9,9 @@ variable "resource_group_location" {
 variable "virtual_network_name" {
   description = "Mention Virtual Network"
   type = string
-  default = "default-VNet"
+  default = "default"
 }
-variable "virtual_network_location" {
+variable "virtual_machine_location" {
   description = "Virtual network location"
   type=string
 }
@@ -30,7 +30,7 @@ variable "subnets" {
 variable "public_ip_name" {
   description = "Provide the public ip name"
   type=string
-  default = "default-ip"
+  default = "default"
 }
 variable "public_ip_allocation_method" {
   description = "Provide Static or Dynamic method allocation for public ip"
@@ -40,7 +40,7 @@ variable "public_ip_allocation_method" {
 variable "network_interface_card_name" {
   description = "Provide name of Netowrk interface card to be associated"
   type=string
-  default="default-nic"
+  default="default"
 }
 variable "nic_ip_configuration" {
   description = "Ip_configuration name for netowrk interface card"
@@ -53,19 +53,19 @@ variable "private_ip_address_allocation" {
   default="Dynamic"
 }
 variable "subnet_to_be_associated" {
-  description = "Name of Subnet to be associated with network card and security group,optional if you going to use default subnet "
+  description = "Name of Subnet to be associated with network card and security group, optional if you going to use default subnet "
   type=string
   default="default"   
 }
 variable "network_security_group_name" {
   description = "Provide Network Security Group Name"
   type=string
-  default="default-nsg"
+  default="default"
 }
 variable "inbound_security_rule_name" {
   description = "Provide security rule name"
   type=string
-  default="default-allow-rdp"
+  default="security-rule-default"
 }
 variable "ports" {
   description = "Mention the ports to be applied on inblound rules"
@@ -82,7 +82,7 @@ variable "vm_size" {
   type=string
   default = "Standard_B1s"
 }
-variable "admin" {
+variable "vm_admin" {
   description = "Provide Admin details for virtual machine like username and paasword"
   type=object({
     computer_name=string
