@@ -9,7 +9,4 @@ Initially, you can deploy windows virtual machine with some basic features,you c
 
 
 **All default name of resources will be prefixed with the provided virtual machine name for the resources identification.
-=======
-This module is used to deploy single VM in a resource group with virtual network and no. of subnets along with some network security rules.
-Initially, you can deploy windows virtual machine with some basic features,you can create linux virtual machine in our future releases.
->>>>>>> 788aa2b4659ab255485acaf02e8aa35bf34da31e
+
