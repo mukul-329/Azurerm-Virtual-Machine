@@ -12,8 +12,8 @@ resource "azurerm_virtual_network" "mod1" {
 
 resource "azurerm_subnet" "mod1" {
   count=length(var.subnets)
-  name                 = locals.subnet[count.index]
-  address_prefixes     = locals.subnet_cidr[count.index]
+  name                 = local.subnet[count.index]
+  address_prefixes     = local.subnet_cidr[count.index]
   resource_group_name  = azurerm_resource_group.mod1.name
   virtual_network_name = azurerm_virtual_network.mod1.name
 }
