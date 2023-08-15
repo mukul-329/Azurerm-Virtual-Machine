@@ -9,7 +9,7 @@ variable "resource_group_location" {
 variable "virtual_network_name" {
   description = "Mention Virtual Network"
   type = string
-  default = "default"
+  default = "vnet-default"
 }
 variable "virtual_machine_location" {
   description = "Virtual network location"
@@ -30,7 +30,7 @@ variable "subnets" {
 variable "public_ip_name" {
   description = "Provide the public ip name"
   type=string
-  default = "default"
+  default = "pip-default"
 }
 variable "public_ip_allocation_method" {
   description = "Provide Static or Dynamic method allocation for public ip"
@@ -40,7 +40,7 @@ variable "public_ip_allocation_method" {
 variable "network_interface_card_name" {
   description = "Provide name of Netowrk interface card to be associated"
   type=string
-  default="default"
+  default="nic-default"
 }
 variable "nic_ip_configuration" {
   description = "Ip_configuration name for netowrk interface card"
@@ -60,7 +60,7 @@ variable "subnet_to_be_associated" {
 variable "network_security_group_name" {
   description = "Provide Network Security Group Name"
   type=string
-  default="default"
+  default="nsg-default"
 }
 variable "inbound_security_rule_name" {
   description = "Provide security rule name"
