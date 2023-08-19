@@ -7,7 +7,7 @@ output "virtual_network" {
   description="Attributes reference for virtual network"
 }
 output "resource_group" {
-  value=azurerm_resource_group.mod1
+  value=local.resource_group
   description="Attributes reference for the resource group"
 }
 output "public_ip" {

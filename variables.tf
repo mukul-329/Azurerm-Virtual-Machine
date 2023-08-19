@@ -1,19 +1,27 @@
 variable "resource_group_name" {
-  description = "Provide Resource Group Name in which resources will be deployed"
+  description = "Provide New Resource Group Name in which resources will be deployed"
   type = string
+  default = null
+}
+variable "existing_resource_group" {
+  description = "Provide the name of existing resource group"
+  type = string
+  default = null
 }
 variable "resource_group_location" {
   description = "Provide Resource Group Location"
   type=string
+  default = ""
+}
+variable "resource_group_tags" {
+  description = "Resource group tagging, optional"
+  type = map(string)
+  default = null
 }
 variable "virtual_network_name" {
   description = "Mention Virtual Network"
   type = string
   default = "vnet-default"
-}
-variable "virtual_machine_location" {
-  description = "Virtual network location"
-  type=string
 }
 variable "address_space"{
   description = "Provide the address space for the virtual network"
@@ -60,7 +68,7 @@ variable "subnet_to_be_associated" {
 variable "network_security_group_name" {
   description = "Provide Network Security Group Name"
   type=string
-  default="nsg-default"
+  default="nsg-default" 
 }
 variable "inbound_security_rule_name" {
   description = "Provide security rule name"
@@ -77,13 +85,17 @@ variable "virtual_machine_name" {
   description = "Provide Virtual Machine name"
   type=string
 }
+variable "virtual_machine_location" {
+  description = "Virtual network location"
+  type=string
+}
 variable "vm_size" {
   description = "Virtual machine size, default is free basic tier sizing"
   type=string
   default = "Standard_B1s"
 }
 variable "vm_admin" {
-  description = "Provide Admin details for virtual machine like username and paasword"
+  description = "Provide Admin details for virtual machine like computer name, username and paasword"
   type=object({
     computer_name=string
     username = string

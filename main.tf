@@ -1,12 +1,24 @@
+data "azurerm_resource_group" "mod1" {
+  count= var.existing_resource_group !=null ? 1 : 0
+  name = var.existing_resource_group
+}
+
 resource "azurerm_resource_group" "mod1" {
+  count = var.resource_group_name !=null ? 1 : 0
   name     = var.resource_group_name
-  location = var.resource_group_location
+  location = local.resource_group_location
+  tags = var.resource_group_tags
+}
+
+locals {
+  # resource_group= var.resource_group_name != null ? azurerm_resource_group.mod1[0] : data.azurerm_resource_group.mod1[0]
+  resource_group=try(azurerm_resource_group.mod1[0],data.azurerm_resource_group.mod1[0])
 }
 
 resource "azurerm_virtual_network" "mod1" {
   name                = local.virtual_network_name
   location            = var.virtual_machine_location
-  resource_group_name = azurerm_resource_group.mod1.name
+  resource_group_name = local.resource_group.name
   address_space       = var.address_space
 }
 
@@ -14,20 +26,20 @@ resource "azurerm_subnet" "mod1" {
   count=length(var.subnets)
   name                 = local.subnet[count.index]
   address_prefixes     = local.subnet_cidr[count.index]
-  resource_group_name  = azurerm_resource_group.mod1.name
+  resource_group_name  = local.resource_group.name
   virtual_network_name = azurerm_virtual_network.mod1.name
 }
 
 resource "azurerm_public_ip" "mod1" {
   name                = local.public_ip_name
-  resource_group_name = azurerm_resource_group.mod1.name
+  resource_group_name = local.resource_group.name
   location            = azurerm_virtual_network.mod1.location
   allocation_method   = var.public_ip_allocation_method
 }
 resource "azurerm_network_interface" "mod1" {
   name                = local.network_interface_card_name
   location            = azurerm_virtual_network.mod1.location
-  resource_group_name = azurerm_resource_group.mod1.name
+  resource_group_name = local.resource_group.name
   ip_configuration {
     public_ip_address_id          = azurerm_public_ip.mod1.id
     subnet_id                     = azurerm_subnet.mod1[index(local.subnet,var.subnet_to_be_associated)].id
@@ -39,7 +51,7 @@ resource "azurerm_network_interface" "mod1" {
 resource "azurerm_network_security_group" "mod1" {
   name                = local.network_security_group_name
   location            = azurerm_virtual_network.mod1.location
-  resource_group_name = azurerm_resource_group.mod1.name
+  resource_group_name = local.resource_group.name
 
   security_rule {
     name                       = local.inbound_security_rule_name
@@ -63,7 +75,7 @@ resource "azurerm_subnet_network_security_group_association" "mod1" {
 resource "azurerm_virtual_machine" "mod1" {
   name                  = var.virtual_machine_name
   location              = azurerm_virtual_network.mod1.location
-  resource_group_name   = azurerm_resource_group.mod1.name
+  resource_group_name   = local.resource_group.name
   network_interface_ids = [azurerm_network_interface.mod1.id]
   vm_size               = var.vm_size
 
