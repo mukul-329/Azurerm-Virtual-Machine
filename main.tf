@@ -4,7 +4,7 @@ data "azurerm_resource_group" "mod1" {
 }
 
 resource "azurerm_resource_group" "mod1" {
-  count = var.resource_group_name !=null ? 1 : 0
+  count = var.resource_group_name != null ? 1 : 0
   name     = var.resource_group_name
   location = local.resource_group_location
   tags = var.resource_group_tags
