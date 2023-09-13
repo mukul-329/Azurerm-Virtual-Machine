@@ -9,3 +9,4 @@ Initially, you can deploy windows virtual machine with some basic features,you c
 
 **All default name of resources will be prefixed with the provided virtual machine name for the resources identification.
 
+**Updated Object Variables
