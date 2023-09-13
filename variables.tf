@@ -70,15 +70,15 @@ variable "network_security_group_name" {
   type=string
   default="nsg-default" 
 }
-variable "inbound_security_rule_name" {
-  description = "Provide security rule name"
-  type=string
-  default="security-rule-default"
-}
+# variable "inbound_security_rule_name" {
+#   description = "Provide security rule name"
+#   type=string
+#   default="security-rule-default"
+# }
 variable "ports" {
   description = "Mention the ports to be applied on inblound rules"
   type=list(string)
-  default = [ "3389" ]
+  default = []
 }
 
 variable "virtual_machine_name" {
@@ -94,66 +94,50 @@ variable "vm_size" {
   type=string
   default = "Standard_B1s"
 }
-variable "vm_admin" {
+variable "virtual_machine_admin_details" {
   description = "Provide Admin details for virtual machine like computer name, username and paasword"
   type=object({
     computer_name=string
     username = string
-    password=string
+    password= optional(string)
   })
 }
 variable "storage_os_disk" {
   description = "Provide the virtual machine os disk details"
   type = object({
-    name = string
-    caching=string
-    create_option=string
-    managed_disk_type=string
+    name = optional(string,"default-disk")
+    caching=optional(string,"ReadWrite")
+    create_option=optional(string,"FromImage")
+    managed_disk_type=optional(string,"Standard_LRS")
   })
-  default = {
-    name              = "default-disk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
+  default = {}
 }
 variable "storage_image" {
   description = "Details for marketplace azure os image"
   type = object({
-    publisher = string
-    offer=string
-    sku=string
-    version=string 
+    publisher = optional(string,"microsoftwindowsserver")
+    offer=optional(string,"windowsserver")
+    sku=optional(string,"2016-datacenter")
+    version=optional(string,"latest") 
   })
-  default = {
-    publisher = "microsoftwindowsserver"
-    offer     = "windowsserver"
-    sku       = "2016-datacenter"
-    version   = "latest"
-  }
+  default = {}
 }
 
 variable "virtual_machine_features" {
   description = "Additional features to lke to add in virtual machine"
   type=object({
-    delete_os_disk = bool
-    delete_data_disk=bool 
+    delete_os_disk = optional(bool,false)
+    delete_data_disk= optional(bool,false)
   })
-  default = {
-    delete_data_disk = false
-    delete_os_disk = false
-  }
+  default = {}
 }
 variable "os_profile_windows_config" {
   description = "Windows configuration options"
   type=object({
-    provision_vm_agent = bool
-    enable_automatic_upgrades=bool 
+    provision_vm_agent= optional(bool,false)
+    enable_automatic_upgrades= optional(bool,false)
   })
-  default = {
-    enable_automatic_upgrades = false
-    provision_vm_agent = false
-  }
+  default = {}
 }
 
 

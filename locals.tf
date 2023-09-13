@@ -6,5 +6,5 @@ locals {
   public_ip_name=var.public_ip_name=="pip-default" ? "${var.virtual_machine_name}-${var.public_ip_name}":var.public_ip_name
   network_interface_card_name=var.network_interface_card_name=="nic-default" ? "${var.virtual_machine_name}-${var.network_interface_card_name}":var.network_interface_card_name
   network_security_group_name=var.network_security_group_name=="nsg-default" ? "${var.virtual_machine_name}-${var.network_security_group_name}":var.network_security_group_name
-  inbound_security_rule_name=var.inbound_security_rule_name=="security-rule-default" ? "${var.virtual_machine_name}-${var.inbound_security_rule_name}":var.inbound_security_rule_name
+# inbound_security_rule_name=var.inbound_security_rule_name=="security-rule-default" ? "${var.virtual_machine_name}-${var.inbound_security_rule_name}":var.inbound_security_rule_name
 }

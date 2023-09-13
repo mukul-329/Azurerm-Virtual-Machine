@@ -53,16 +53,21 @@ resource "azurerm_network_security_group" "mod1" {
   location            = azurerm_virtual_network.mod1.location
   resource_group_name = local.resource_group.name
 
-  security_rule {
-    name                       = local.inbound_security_rule_name
-    priority                   = 100
+  dynamic security_rule {
+    for_each = var.ports
+    iterator = i
+    content {
+    name                       = "${local.network_security_group_name}-rule-${i.value}"
+    priority                   = sum([100,i.key])
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_ranges    = var.ports
+    destination_port_range     = i.value
     source_address_prefix      = "*"
     destination_address_prefix = "*"
+    }
+    
   }
 
 }
@@ -77,7 +82,7 @@ resource "azurerm_virtual_machine" "mod1" {
   location              = azurerm_virtual_network.mod1.location
   resource_group_name   = local.resource_group.name
   network_interface_ids = [azurerm_network_interface.mod1.id]
-  vm_size               = var.vm_size
+  vm_size = var.vm_size
 
   delete_os_disk_on_termination    = var.virtual_machine_features.delete_os_disk
   delete_data_disks_on_termination = var.virtual_machine_features.delete_data_disk
@@ -95,9 +100,9 @@ resource "azurerm_virtual_machine" "mod1" {
     managed_disk_type = var.storage_os_disk.managed_disk_type
   }
   os_profile {
-    computer_name  = var.vm_admin.computer_name
-    admin_username =var.vm_admin.username
-    admin_password = var.vm_admin.password
+    computer_name  = var.virtual_machine_admin_details.computer_name
+    admin_username =var.virtual_machine_admin_details.username
+    admin_password = var.virtual_machine_admin_details.password
   }
   os_profile_windows_config {
     provision_vm_agent = var.os_profile_windows_config.provision_vm_agent
